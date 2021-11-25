@@ -15,7 +15,7 @@ world_data = [[ [x, y, 0] for x in range(world_width)] for y in range(world_heig
 p_pos = [world_width//2, 325]
 gravity_coef = 1
 is_jump = True
-r_d = 50
+r_d = 60
 b_size_x = RES[0] // r_d
 b_size_y = RES[1] // r_d
 
@@ -98,20 +98,21 @@ while True:
 				if x[2] == 7:
 					color = (10, 10, 10)#obsidian
 				if x[2] == 8:
-					color = (30, 100, 255)#water
+					color = (50, 150, 255)#water
 					try:
 						if not world_data[x[1]+1][x[0]][2]:
 							world_data[x[1]+1][x[0]][2] = 8
 							x[2] = 0
 						elif not world_data[x[1]][x[0]-1][2] and not world_data[x[1]][x[0]+1][2]:
-							world_data[x[1]][x[0]+choice([-1, 1])][2] = 8
+							world_data[x[1]][x[0]+1][2] = 8
 							x[2] = 0
 						elif not world_data[x[1]][x[0]-1][2]:
 							world_data[x[1]][x[0]-1][2] = 8
-							x[2] = 0
+							x[2] = 0	
 						elif not world_data[x[1]][x[0]+1][2]:
 							world_data[x[1]][x[0]+1][2] = 8
 							x[2] = 0
+							
 					except:
 						pass
 
