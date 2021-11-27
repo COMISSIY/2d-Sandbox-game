@@ -1,20 +1,20 @@
 import pygame, math
-from random import randint, choice
+from random import randint, choice, random
 pygame.init()
 
-RES = 800, 800
+RES = 800, 600
 sc = pygame.display.set_mode(RES)
 pygame.display.set_caption('Terraria for Linux')
 clock = pygame.time.Clock()
 f1 = pygame.font.Font(None, 30)
-world_width = 1500
+world_width = 500
 world_height = 600
 
 world_data = [[ [x, y, 0] for x in range(world_width)] for y in range(world_height)]
 
 p_pos = [world_width//2, 325]
 gravity_coef = 1
-is_jump = True
+
 r_d = 60
 b_size_x = RES[0] // r_d
 b_size_y = RES[1] // r_d
@@ -28,9 +28,13 @@ def distance(a, b):
 	return math.sqrt(a.x**2-b.x**2+a.y**2-b.y**2)
 
 def generate_land(data):
+	print("land generation...")
+	offset = randint(-50, 50)
 	for x in range(0, len(data[0])):
 		# height = min(int(abs((math.sin(x/50)-math.cos(x/10))-25)*10), world_height)
-		height = min(int(abs((math.cos(x/(math.pi*5))+math.sin(x/40))*10)+250), world_height)
+		height = min(int(abs((math.cos((x-offset)/15 )+math.sin((x-offset)/40))*20)+250), world_height)
+		height = min(int((abs(((math.sin(abs(x-offset))/2.5)**3+(math.cos(abs(x-offset)**0.8)/5)-10)*20)+height)/2), world_height)
+		height = min(int((height + abs((math.sin((x-offset)/7)-1)*4)+math.cos(x-offset)/2)*2)//2, world_height)
 		for n, y in enumerate(range(len(data)-height, len(data))):
 			if n < randint(1, 4):
 				data[y][x][2] = 1
@@ -43,6 +47,8 @@ def generate_land(data):
 					data[y][x][2] = randint(5, 7)
 				else:
 					data[y][x][2] = 3
+	print('land generation done')
+	print('planting trees...')
 	for x in range(0, len(data[0])-1):
 		for y in range(0, len(data)-1):
 			tree = randint(0, 20)
@@ -55,7 +61,7 @@ def generate_land(data):
 						data[i][x][2]=4
 					else:
 						data[i][x-1][2], data[i][x][2], data[i][x+1][2] = 1, 1, 1
-
+	print('planting trees done')
 
 	return data
 generate_land(world_data)
